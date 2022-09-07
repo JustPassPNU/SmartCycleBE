@@ -28,6 +28,8 @@ dependencies {
 	implementation("commons-dbcp:commons-dbcp:1.4")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("io.jsonwebtoken:jjwt:0.9.1")
+
+	implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
 }
 
 tasks.withType<KotlinCompile> {
