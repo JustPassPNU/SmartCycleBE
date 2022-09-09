@@ -16,6 +16,7 @@ import com.example.SmartCycle.products.exception.NotFoundException
 import com.example.SmartCycle.products.mail.MailService
 import com.example.SmartCycle.products.token.TokenService
 import com.example.SmartCycle.products.user.UserService
+import java.security.SignatureException
 import javax.transaction.Transactional
 import javax.validation.Valid
 
@@ -126,13 +127,24 @@ class UserController(
         token: String
     ): ResponseMessage {
 
-        val result = tokenService.verifyToken(token)
+        try {
+            val result = tokenService.verifyToken(token)
 
-        return ResponseMessage(
-            result = true,
-            message = "nice",
-            data = null
-        )
+            return ResponseMessage(
+                result = true,
+                message = "nice",
+                data = result
+            )
+        } catch (e: SignatureException) {
+            return ResponseMessage(
+                result = false,
+                message = "토큰 인증 오류",
+                data = null
+            )
+        }
+
+
+
 
     }
 

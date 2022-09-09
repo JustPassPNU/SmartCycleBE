@@ -5,11 +5,15 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.stereotype.Service
 import com.example.SmartCycle.products.entities.User
+import org.springframework.beans.factory.annotation.Value
 import java.time.Duration
 import java.util.*
 
 @Service
 class TokenService {
+
+    @Value("\${smartcycle.jwt.signingkey}")
+    private lateinit var signingkey: String
 
     fun generateToken(user: User): String {
         val nowDate = Date()
@@ -21,7 +25,7 @@ class TokenService {
             .setExpiration(Date(nowDate.time + Duration.ofMinutes(30).toMillis()))
             .claim("id", user.id)
             .claim("nickname", user.nickName)
-            .signWith(SignatureAlgorithm.HS256, "c21hcnRjeWNsZWp1c3RwYXNz")
+            .signWith(SignatureAlgorithm.HS256, signingkey)
             .compact()
 
         return jwtToken
@@ -30,8 +34,8 @@ class TokenService {
     fun verifyToken(token: String): Pair<String, String> {
 
         val realToken = token.split(" ")[1]
-
-        val parseToken = Jwts.parser().setSigningKey("password").parseClaimsJws(realToken)
+        println(signingkey)
+        val parseToken = Jwts.parser().setSigningKey(signingkey).parseClaimsJws(realToken)
 
         val id = parseToken.body["id"].toString()
         val nickname = parseToken.body["nickname"].toString()
