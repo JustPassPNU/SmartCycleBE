@@ -13,6 +13,7 @@ class User(
     val pw: String,
     val name: String,
     val nickName: String,
+    val email: String,
     val phone: String,
     val createdDate: LocalDateTime = LocalDateTime.now(),
     var state: STATE = STATE.NO

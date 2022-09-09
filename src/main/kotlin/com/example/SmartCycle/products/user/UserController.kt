@@ -1,4 +1,4 @@
-package com.example.SmartCycle.products.controller
+package com.example.SmartCycle.products.user
 
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -13,28 +13,33 @@ import com.example.SmartCycle.products.dto.LoginDto
 import com.example.SmartCycle.products.dto.RegisterDto
 import com.example.SmartCycle.products.dto.ResponseMessage
 import com.example.SmartCycle.products.exception.NotFoundException
-import com.example.SmartCycle.products.service.TokenService
-import com.example.SmartCycle.products.service.UserService
+import com.example.SmartCycle.products.mail.MailService
+import com.example.SmartCycle.products.token.TokenService
+import com.example.SmartCycle.products.user.UserService
+import javax.transaction.Transactional
 import javax.validation.Valid
 
 @RestController
 class UserController(
     private val userService: UserService,
-    private val tokenService: TokenService
+    private val tokenService: TokenService,
+    private val mailService: MailService,
 ) {
 
     @PostMapping("user/register")
+    @Transactional
     fun register(
         @RequestBody
         @Valid
         registerDto: RegisterDto
     ): ResponseMessage {
 
-        val data = userService.register(registerDto)
+        val authToken = userService.register(registerDto)
+        mailService.sendMail(authToken, registerDto.email)
         return ResponseMessage(
             result = true,
             message = null,
-            data = data
+            data = null
         )
     }
 

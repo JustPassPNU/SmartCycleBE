@@ -1,4 +1,4 @@
-package com.example.SmartCycle.products.service
+package com.example.SmartCycle.products.token
 
 import io.jsonwebtoken.Header
 import io.jsonwebtoken.Jwts
@@ -9,9 +9,7 @@ import java.time.Duration
 import java.util.*
 
 @Service
-class TokenService(
-
-) {
+class TokenService {
 
     fun generateToken(user: User): String {
         val nowDate = Date()
@@ -23,7 +21,7 @@ class TokenService(
             .setExpiration(Date(nowDate.time + Duration.ofMinutes(30).toMillis()))
             .claim("id", user.id)
             .claim("nickname", user.nickName)
-            .signWith(SignatureAlgorithm.HS256, "password")
+            .signWith(SignatureAlgorithm.HS256, "c21hcnRjeWNsZWp1c3RwYXNz")
             .compact()
 
         return jwtToken

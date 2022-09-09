@@ -1,4 +1,4 @@
-package com.example.SmartCycle.products.service
+package com.example.SmartCycle.products.user
 
 import org.springframework.stereotype.Service
 import com.example.SmartCycle.products.dto.LoginDto
@@ -6,8 +6,8 @@ import com.example.SmartCycle.products.dto.RegisterDto
 import com.example.SmartCycle.products.entities.Token
 import com.example.SmartCycle.products.entities.User
 import com.example.SmartCycle.products.exception.NotFoundException
-import com.example.SmartCycle.products.repositories.TokenRepository
-import com.example.SmartCycle.products.repositories.UserRepository
+import com.example.SmartCycle.products.token.TokenRepository
+import java.lang.IllegalStateException
 import java.util.*
 import javax.transaction.Transactional
 
@@ -17,17 +17,19 @@ class UserService(
     private val tokenRepository: TokenRepository
 ) {
 
+
     fun register(registerDto: RegisterDto): String {
 
         val duplicationId = userRepository.findFirstById(registerDto.id)
 
         if (duplicationId != null)
-            return "id중복"
+            throw IllegalStateException("이미 존재하는 id입니다.")
 
         val user = User(
             id = registerDto.id,
             pw = registerDto.pw,
             name = registerDto.name,
+            email = registerDto.email,
             nickName = registerDto.nickName,
             phone = registerDto.phone
         )

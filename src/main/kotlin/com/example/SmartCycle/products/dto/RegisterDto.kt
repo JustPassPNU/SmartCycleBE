@@ -13,6 +13,8 @@ data class RegisterDto (
     val pw: String,
     @field:NotBlank(message = "이름이 없습니다.")
     val name: String,
+    @field:NotBlank(message = "이메일이 없습니다.")
+    val email: String,
     @field:NotBlank(message = "닉네임이 없습니다.")
     val nickName: String,
     @field:NotBlank(message = "핸드폰 번호가 없습니다.")
