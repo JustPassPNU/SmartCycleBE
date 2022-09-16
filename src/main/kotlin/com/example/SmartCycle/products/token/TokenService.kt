@@ -52,7 +52,6 @@ class TokenService {
             val expiration = userInfo.expiration
             expiration.after(Date())
         } catch (e: Exception) {
-            e.printStackTrace()
             false
         }
     }

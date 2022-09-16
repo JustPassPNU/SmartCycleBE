@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RestController
 import com.example.SmartCycle.products.dto.LoginDto
+import com.example.SmartCycle.products.dto.LoginResponse
 import com.example.SmartCycle.products.dto.RegisterDto
 import com.example.SmartCycle.products.dto.ResponseMessage
 import com.example.SmartCycle.products.entities.User
@@ -108,13 +109,14 @@ class UserController(
 
         val jwtToken = tokenService.generateToken(user)
 
-        responseHeaders.set("Authorization", "Bearer $jwtToken")
-
         return ResponseEntity<ResponseMessage>(
             ResponseMessage(
                 result = true,
                 message = null,
-                data = user
+                data = LoginResponse(
+                    user = user,
+                    token = "Bearer $jwtToken"
+                )
             ),
             responseHeaders,
             HttpStatus.CREATED

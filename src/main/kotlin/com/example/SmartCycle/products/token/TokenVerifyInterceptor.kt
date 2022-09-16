@@ -1,5 +1,7 @@
 package com.example.SmartCycle.products.token
 
+import com.example.SmartCycle.products.exception.BaseResponseCode
+import com.example.SmartCycle.products.exception.InterceptorException
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerInterceptor
 import javax.naming.AuthenticationException
@@ -14,9 +16,9 @@ class TokenVerifyInterceptor(
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
         val token: String? = TokenExtractor.extract(request)
         token?.let {
-            tokenService.verifyToken(it)
-        } ?: throw AuthenticationException("인증실패")
-
-        return true
+            if(tokenService.verifyToken(it))
+                return true
+        }
+        throw InterceptorException(BaseResponseCode.UNAUTHORIZED)
     }
 }

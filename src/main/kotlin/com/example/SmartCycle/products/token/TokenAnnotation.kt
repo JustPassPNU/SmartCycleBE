@@ -34,10 +34,9 @@ class LoginUserArgumentResolver(
             httpRequest.getNativeRequest(HttpServletRequest::class.java) as HttpServletRequest
         val token = TokenExtractor.extract(httpServletRequest)
         token?.let {
-            if (tokenService.verifyToken(token)) { // 토큰검증
-                val userInfo = tokenService.getUserFromToken(token) // 검증된 토큰에서 id값을 뽑아서 User를 조회
-                val user = userRepository.findFirstById(userInfo!!.first)
-                return user
+            if (tokenService.verifyToken(token)) {
+                val userInfo = tokenService.getUserFromToken(token)
+                return userRepository.findFirstById(userInfo!!.first)
             }
         }
         return null
