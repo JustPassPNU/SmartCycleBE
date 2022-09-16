@@ -16,8 +16,7 @@ class MapController(
 
     @GetMapping("map/{mapName}")
     fun provideMap(
-        @RequestHeader("Authorization") token: String,
-        @PathVariable mapName: String
+        @PathVariable mapName: String,
     ): ResponseMessage {
         val url = s3Service.getPreSignedURL(mapName)
         return ResponseMessage(

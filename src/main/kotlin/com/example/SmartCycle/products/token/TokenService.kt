@@ -39,9 +39,9 @@ class TokenService {
 
             val id = parseToken.body["id"].toString()
             val nickname = parseToken.body["nickname"].toString()
-
             Pair(id, nickname)
         } catch (e: Exception) {
+            e.printStackTrace()
             null
         }
     }
@@ -52,6 +52,7 @@ class TokenService {
             val expiration = userInfo.expiration
             expiration.after(Date())
         } catch (e: Exception) {
+            e.printStackTrace()
             false
         }
     }

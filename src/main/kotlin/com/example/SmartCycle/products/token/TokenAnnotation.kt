@@ -32,13 +32,12 @@ class LoginUserArgumentResolver(
     ): User? {
         val httpServletRequest: HttpServletRequest =
             httpRequest.getNativeRequest(HttpServletRequest::class.java) as HttpServletRequest
-        // Http 요청에서 토큰추출
         val token = TokenExtractor.extract(httpServletRequest)
-        // 토큰이 존재하는 경우
         token?.let {
             if (tokenService.verifyToken(token)) { // 토큰검증
                 val userInfo = tokenService.getUserFromToken(token) // 검증된 토큰에서 id값을 뽑아서 User를 조회
-                return userRepository.findFirstById(userInfo!!.first)
+                val user = userRepository.findFirstById(userInfo!!.first)
+                return user
             }
         }
         return null

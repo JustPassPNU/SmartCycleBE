@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RestController
 import com.example.SmartCycle.products.dto.LoginDto
 import com.example.SmartCycle.products.dto.RegisterDto
 import com.example.SmartCycle.products.dto.ResponseMessage
+import com.example.SmartCycle.products.entities.User
 import com.example.SmartCycle.products.exception.NotFoundException
 import com.example.SmartCycle.products.mail.MailService
 import com.example.SmartCycle.products.token.TokenService
+import com.example.SmartCycle.products.token.ValidUser
 import javax.transaction.Transactional
 import javax.validation.Valid
 
@@ -121,25 +123,13 @@ class UserController(
 
     @GetMapping("user/verify")
     fun userVerify(
-        @RequestHeader("Authorization") token: String
+        @ValidUser user: User?
     ): ResponseMessage {
 
-        val realToken = token.split(" ")[1]
-
-        val result = tokenService.getUserFromToken(realToken)
-
-        return if (result != null) {
-            ResponseMessage(
+        return ResponseMessage(
                 result = true,
                 message = "nice",
-                data = result
+                data = user
             )
-        } else {
-            ResponseMessage(
-                result = false,
-                message = "토큰 인증 오류",
-                data = null
-            )
-        }
     }
 }
