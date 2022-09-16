@@ -15,8 +15,6 @@ import com.example.SmartCycle.products.dto.ResponseMessage
 import com.example.SmartCycle.products.exception.NotFoundException
 import com.example.SmartCycle.products.mail.MailService
 import com.example.SmartCycle.products.token.TokenService
-import com.example.SmartCycle.products.user.UserService
-import java.security.SignatureException
 import javax.transaction.Transactional
 import javax.validation.Valid
 
@@ -123,29 +121,25 @@ class UserController(
 
     @GetMapping("user/verify")
     fun userVerify(
-        @RequestHeader("Authorization")
-        token: String
+        @RequestHeader("Authorization") token: String
     ): ResponseMessage {
 
-        try {
-            val result = tokenService.verifyToken(token)
+        val realToken = token.split(" ")[1]
 
-            return ResponseMessage(
+        val result = tokenService.getUserFromToken(realToken)
+
+        return if (result != null) {
+            ResponseMessage(
                 result = true,
                 message = "nice",
                 data = result
             )
-        } catch (e: SignatureException) {
-            return ResponseMessage(
+        } else {
+            ResponseMessage(
                 result = false,
                 message = "토큰 인증 오류",
                 data = null
             )
         }
-
-
-
-
     }
-
 }
