@@ -36,7 +36,7 @@ class LoginUserArgumentResolver(
         token?.let {
             if (tokenService.verifyToken(token)) {
                 val userInfo = tokenService.getUserFromToken(token)
-                return userRepository.findFirstById(userInfo!!.first)
+                return userRepository.findFirstById(userInfo!!)
             }
         }
         return null

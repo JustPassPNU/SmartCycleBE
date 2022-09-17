@@ -25,21 +25,19 @@ class TokenService {
             .setIssuedAt(nowDate)
             .setExpiration(Date(nowDate.time + Duration.ofMinutes(1440).toMillis()))
             .claim("id", user.id)
-            .claim("nickname", user.nickName)
             .signWith(SignatureAlgorithm.HS256, signingkey)
             .compact()
 
         return jwtToken
     }
 
-    fun getUserFromToken(token: String): Pair<String, String>? {
+    fun getUserFromToken(token: String): String? {
 
         return try {
             val parseToken = Jwts.parser().setSigningKey(signingkey).parseClaimsJws(token)
 
             val id = parseToken.body["id"].toString()
-            val nickname = parseToken.body["nickname"].toString()
-            Pair(id, nickname)
+            return id
         } catch (e: Exception) {
             e.printStackTrace()
             null

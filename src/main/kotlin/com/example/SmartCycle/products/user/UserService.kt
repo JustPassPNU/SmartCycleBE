@@ -30,8 +30,6 @@ class UserService(
             pw = registerDto.pw,
             name = registerDto.name,
             email = registerDto.email,
-            nickName = registerDto.nickName,
-            phone = registerDto.phone
         )
 
         userRepository.save(user)
@@ -48,14 +46,10 @@ class UserService(
 
     fun login(loginDto: LoginDto): User? {
 
-        val user = userRepository.findFirstById(loginDto.id)
-
-        if (user == null)
-            return null
+        val user = userRepository.findFirstById(loginDto.id) ?: return null
 
         if (user.pw != loginDto.pw)
             return null
-
         return user
 
     }
