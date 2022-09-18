@@ -29,7 +29,6 @@ class UserController(
 ) {
 
     @PostMapping("user/register")
-    @Transactional
     fun register(
         @RequestBody
         @Valid
@@ -99,7 +98,7 @@ class UserController(
             return ResponseEntity(
                 ResponseMessage(
                     result = true,
-                    message = "fail",
+                    message = "아이디 혹은 비밀번호가 없거나 틀렸습니다.",
                     data = null
                 ),
                 responseHeaders,
